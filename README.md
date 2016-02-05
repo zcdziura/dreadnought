@@ -1,22 +1,21 @@
 Dreadnought
 ===========
 
-An automated aetherhunting system for the Mudlet MUD client, specifically for the game Lusternia.
+An automated aetherhunting system for Lusternia, written in Lua for the Mudlet client.
 
-Synopsis
---------
-
-Dreadnought is a spiritual successor to the popular Windmills aetherhunting system, seeking to be as compatible as possible (while only breaking compatibility when necessary). As much as possible, Dreadnought tries to automate automate tasks in such a way as not to require someone calling out for commands.
-
-Installing
+Installation
 ----------
 
-Download the latest Release ZIP file and install it through Mudlet's Package window. Unzip it, then navigate to the top-level of the repository. Zip up the included `Dreadnought` directory, then install that ZIP file through Mudlet's Package window.
+1. Download the latest release and extract it somewhere in your computer.
+2. Within the project's root directory, create a ZIP archive of the included `Dreadnought` directory.
+3. Open Mudlet and import the newly created ZIP archive using the built-in package manager.
 
 Updating
 --------
 
-Unfortunately, because Mudlet doesn't make updating packages easy, you'll have to uninstall the previous version of Dreadnought before installing the updated version.
+1. Open up Mudlet's Package Manager.
+2. Select the `Dreadnought` package and click Uninstall.
+3. See the above Installation instructions.
 
 Documentation
 -------------
