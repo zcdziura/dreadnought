@@ -2202,7 +2202,10 @@ dmsg(&quot;Autopilot path set up.&quot;)</script>
                 <Alias isActive="yes" isFolder="no">
                     <name>Reset</name>
                     <script>if #matches &gt; 1 then
-	dreadnought.pilot.reset()	
+	local resets = dreadnought.reset.pilot()
+
+	dreadnought.aetherbeastsTotal = resets.aetherbeastsTotal
+	dreadnought.pilot = resets.pilot
 	dmsg(&quot;All pilot variables have been reset.&quot;)
 else
 	dmsg(&quot;This will reset ALL piloting variables. Please type 'preset confirm' to confirm.&quot;)
@@ -2405,7 +2408,10 @@ dreadnought.repairShip()</script>
                 <Alias isActive="yes" isFolder="no">
                     <name>Reset</name>
                     <script>if #matches &gt; 1 then
-	dreadnought.empath.reset()	
+	local resets = dreadnought.reset.empath()
+
+	dreadnought.aetherbeastsTotal = resets.aetherbeastsTotal
+	dreadnought.empath = resets.empath
 	dmsg(&quot;All empath variables have been reset.&quot;)
 else
 	dmsg(&quot;This will reset ALL empathing variables. Please type 'greset confirm' to confirm.&quot;)
@@ -2642,33 +2648,25 @@ dmsg(&quot;All Dreadnought reflexes have been disabled.&quot;)</script>
 		siphonCallout = false
 	},
 
-	paths = {},
-
-	reset = function ()
-		dreadnought.aetherbeastsTotal = 0
-		dreadnought.pilot.calloutTimer = 0
-		dreadnought.pilot.aetherbeastsPresent = 0
-		dreadnought.pilot.currentPosition = 1
-		dreadnought.pilot.flags = {
-			shocked = false,
-			siphonCallout = false
-		}
-
-		dreadnought.pilot.paths = {}
-	end
+	paths = {}
 }
 
 function dreadnought.reset.pilot()
-	dreadnought.aetherbeastsTotal = 0
-	dreadnought.pilot.calloutTimer = 0
-	dreadnought.pilot.aetherbeastsPresent = 0
-	dreadnought.pilot.currentPosition = 1
-	dreadnought.pilot.flags = {
-		shocked = false,
-		siphonCallout = false
-	}
+	return {
+		aetherbeastsTotal = 0,
 
-	dreadnought.pilot.paths = {}
+		pilot = {
+			calloutTimer = 0,
+			aetherbeastsPresent = 0,
+			currentPosition = 1,
+			flags = {
+				shocked = false,
+				siphonCallout = false
+			},
+
+			paths = {}
+		}
+	}
 end</script>
                 <eventHandlerList/>
                 <Script isActive="yes" isFolder="no">
@@ -2771,28 +2769,33 @@ end</script>
 		haveClarity = false
 	},
 
-	slivvensFound = 0,
+	slivvensFound = 0
+}
 
-	reset = function ()
-		dreadnought.aetherbeastsTotal = 0
-		dreadnought.empath.modules = {
-			chair = &quot;&quot;,
-			grid = &quot;&quot;,
-			turrets = {},
-			collectors = {},
-			orb = &quot;&quot;,
-			cube = &quot;&quot;
+function dreadnought.reset.empath()
+	return {
+		aetherbeastsTotal = 0,
+
+		empath = {
+			modules = {
+				chair = &quot;&quot;,
+				grid = &quot;&quot;,
+				turrets = {},
+				collectors = {},
+				orb = &quot;&quot;,
+				cube = &quot;&quot;
+			},
+
+			commands = heap.new(),
+
+			flags = {
+				haveClarity = false
+			},
+
+			slivvensFound = 0
 		}
-
-		dreadnought.empath.commands = heap.new()
-
-		dreadnought.empath.flags = {
-			haveClarity = false
-		}
-
-		dreadnought.empath.slivvensFound = 0
-	end
-}</script>
+	}
+end</script>
                 <eventHandlerList/>
                 <Script isActive="yes" isFolder="no">
                     <name>Repair Ship</name>
