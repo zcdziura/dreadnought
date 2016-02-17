@@ -2624,7 +2624,7 @@ dmsg(&quot;All Dreadnought reflexes have been disabled.&quot;)</script>
             <name>Dreadnought</name>
             <packageName></packageName>
             <script>dreadnought = dreadnought or {
-	version = &quot;1.0&quot;,
+	version = &quot;1.1&quot;,
 	aetherbeastsTotal = 0,
 	balance = true,
 	skills = {},
