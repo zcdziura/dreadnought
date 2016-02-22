@@ -288,7 +288,7 @@ send(&quot;config aethermap off&quot;)</script>
                     </regexCodePropertyList>
                 </Trigger>
             </TriggerGroup>
-            <TriggerGroup isActive="no" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+            <TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                 <name>Pilot</name>
                 <script></script>
                 <triggerType>0</triggerType>
@@ -560,6 +560,36 @@ end
                             <integer>3</integer>
                         </regexCodePropertyList>
                     </Trigger>
+                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                        <name>Autopilot Movement Failsafe</name>
+                        <script>tempTimer(3, function ()
+	dreadnought.autopilot(dreadnought.balance,
+		dreadnought.pilot.aetherbeastsPresent,
+		dreadnought.aetherbeastsTotal,
+		dreadnought.pilot.currentPosition,
+		dreadnought.pilot.flags
+	)
+	end
+)</script>
+                        <triggerType>0</triggerType>
+                        <conditonLineDelta>0</conditonLineDelta>
+                        <mStayOpen>0</mStayOpen>
+                        <mCommand></mCommand>
+                        <packageName></packageName>
+                        <mFgColor>#ff0000</mFgColor>
+                        <mBgColor>#ffff00</mBgColor>
+                        <mSoundFile></mSoundFile>
+                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                        <regexCodeList>
+                            <string>^You steer(?:\s\w+(?:\'\w+)?)+ to the \w+\.$</string>
+                            <string>^With a ripple,(?:\s\w+(?:\'\w+)?)+ frees itself from its shockwave\.$</string>
+                        </regexCodeList>
+                        <regexCodePropertyList>
+                            <integer>1</integer>
+                            <integer>1</integer>
+                        </regexCodePropertyList>
+                    </Trigger>
                 </TriggerGroup>
                 <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Ship Move</name>
@@ -672,7 +702,7 @@ resetFormat()</script>
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList/>
                 <regexCodePropertyList/>
-                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Grid Setup</name>
                     <script>if matches[2] == &quot;chair&quot; then
 	dreadnought.empath.modules.chair = matches[3]
@@ -1313,7 +1343,7 @@ disableTrigger(&quot;Turret Setup&quot;)</script>
                     <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>Aetherbeast Summoned</name>
                         <script>table.insert(dreadnought.combateer.targets, matches[2])
-dreadnought.fireTurret()</script>
+dreadnought.fireTurret(dreadnought.combateer.targets, dreadnought.combateer.flags.targetAcquired, dreadnought.combateer.flags.vortexCalled, dreadnought.combateer.flags.shockwaveCalled)</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>99</conditonLineDelta>
                         <mStayOpen>0</mStayOpen>
@@ -1336,7 +1366,7 @@ dreadnought.fireTurret()</script>
                     <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>Karibidean Summoned</name>
                         <script>table.insert(dreadnought.combateer.targets, &quot;karibidean&quot;)
-dreadnought.fireTurret()</script>
+dreadnought.fireTurret(dreadnought.combateer.targets, dreadnought.combateer.flags.targetAcquired, dreadnought.combateer.flags.vortexCalled, dreadnought.combateer.flags.shockwaveCalled)</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>0</conditonLineDelta>
                         <mStayOpen>0</mStayOpen>
@@ -1373,7 +1403,7 @@ dreadnought.fireTurret()</script>
                     <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>Targeting</name>
                         <script>table.insert(dreadnought.combateer.targets, matches[2])
-dreadnought.fireTurret()</script>
+dreadnought.fireTurret(dreadnought.combateer.targets, dreadnought.combateer.flags.targetAcquired, dreadnought.combateer.flags.vortexCalled, dreadnought.combateer.flags.shockwaveCalled)</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>99</conditonLineDelta>
                         <mStayOpen>0</mStayOpen>
@@ -1397,7 +1427,7 @@ dreadnought.fireTurret()</script>
                 <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Turret Balance</name>
                     <script>dreadnought.balance = true
-dreadnought.fireTurret()</script>
+dreadnought.fireTurret(dreadnought.combateer.targets, dreadnought.combateer.flags.targetAcquired, dreadnought.combateer.flags.vortexCalled, dreadnought.combateer.flags.shockwaveCalled)</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>39</conditonLineDelta>
                     <mStayOpen>0</mStayOpen>
@@ -2065,7 +2095,43 @@ tempTimer(0.1, [[send(&quot;shipt Aye aye, Captain! Deactivating my collector&qu
             </Trigger>
         </TriggerGroup>
     </TriggerPackage>
-    <TimerPackage/>
+    <TimerPackage>
+        <TimerGroup isActive="yes" isFolder="yes" isTempTimer="no" isOffsetTimer="no">
+            <name>Dreadnought</name>
+            <script></script>
+            <command></command>
+            <packageName></packageName>
+            <time>00:00:00.000</time>
+            <TimerGroup isActive="no" isFolder="yes" isTempTimer="no" isOffsetTimer="no">
+                <name>Shockwaves</name>
+                <script></script>
+                <command></command>
+                <packageName></packageName>
+                <time>00:00:00.000</time>
+                <Timer isActive="yes" isFolder="no" isTempTimer="no" isOffsetTimer="no">
+                    <name>Shockwaves Expired</name>
+                    <script></script>
+                    <command>shipt Attention! The shockwaves have expired!</command>
+                    <packageName></packageName>
+                    <time>00:01:00.000</time>
+                </Timer>
+                <Timer isActive="yes" isFolder="no" isTempTimer="no" isOffsetTimer="no">
+                    <name>Five Minute Announcement</name>
+                    <script></script>
+                    <command>shipt Attention! The shockwaves will expire in five minutes!</command>
+                    <packageName></packageName>
+                    <time>00:00:55.000</time>
+                </Timer>
+                <Timer isActive="yes" isFolder="no" isTempTimer="no" isOffsetTimer="no">
+                    <name>Fifteen Minute Announcement</name>
+                    <script></script>
+                    <command>shipt Attention! The shockwaves will expire in fifteen minutes!</command>
+                    <packageName></packageName>
+                    <time>00:00:45.000</time>
+                </Timer>
+            </TimerGroup>
+        </TimerGroup>
+    </TimerPackage>
     <AliasPackage>
         <AliasGroup isActive="yes" isFolder="yes">
             <name>Dreadnought</name>
