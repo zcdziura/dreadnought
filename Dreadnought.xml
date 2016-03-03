@@ -113,7 +113,7 @@ if matches[2] == &quot;chair&quot; then
 	disableTrigger(&quot;Pilot&quot;)
 	disableTrigger(&quot;Autopilot&quot;)
 
-	local returned = dreadnought.pilot.reset()
+	local returned = dreadnought.reset.pilot()
 	dreadnought.aetherbeastsTotal = returned.aetherbeastsTotal
 	dreadnought.pilot = returned.pilot
 
@@ -121,7 +121,7 @@ elseif matches[2] == &quot;grid&quot; then
 	disableAlias(&quot;Empath&quot;)
 	disableTrigger(&quot;Empath&quot;)
 
-	local returned = dreadnought.empath.reset()
+	local returned = dreadnought.reset.pilot()
 	dreadnought.aetherbeastsTotal = returned.aetherbeastsTotal
 	dreadnought.empath = returned.empath
 
@@ -304,8 +304,13 @@ dreadnought.pilot.siphonCalloutCount = 0
 
 send(&quot;shipt Target &quot; .. matches[2])
 
-local newPosition = dreadnought.autopilot(dreadnought.balance, dreadnought.pilot.aetherbeastsPresent,
-		dreadnought.aetherbeastsTotal, dreadnought.pilot.currentPosition, dreadnought.pilot.flags)
+local newPosition = dreadnought.autopilot(
+	dreadnought.balance,
+	dreadnought.pilot.aetherbeastsPresent,
+	dreadnought.aetherbeastsTotal,
+	dreadnought.pilot.currentPosition,
+	dreadnought.pilot.flags
+)
 
 if newPosition ~= 0 then
 	dreadnought.pilot.currentPosition = newPosition
@@ -344,8 +349,17 @@ send(&quot;shipt Target karibidean&quot;)
 flowerbox(&quot;red&quot;, &quot;KARIBIDEAN!!!&quot;)
 dmsg(&quot;Switching to manual override!&quot;)
 
-dreadnought.autopilot(dreadnought.balance, dreadnought.pilot.aetherbeastsPresent,
-		dreadnought.aetherbeastsTotal, dreadnought.pilot.currentPosition, dreadnought.pilot.flags)
+local newPosition = dreadnought.autopilot(
+	dreadnought.balance,
+	dreadnought.pilot.aetherbeastsPresent,
+	dreadnought.aetherbeastsTotal,
+	dreadnought.pilot.currentPosition,
+	dreadnought.pilot.flags
+)
+
+if newPosition ~= 0 then
+	dreadnought.pilot.currentPosition = newPosition
+end
 
 disableTrigger(&quot;Siphon Callout&quot;)
                                                                            </script>
@@ -370,13 +384,17 @@ disableTrigger(&quot;Siphon Callout&quot;)
                         <name>Aetherbeast Enters</name>
                         <script>dreadnought.pilot.aetherbeastsPresent = dreadnought.pilot.aetherbeastsPresent + 1
 
-local newPosition = dreadnought.autopilot(dreadnought.balance, dreadnought.pilot.aetherbeastsPresent,
-		dreadnought.aetherbeastsTotal, dreadnought.pilot.currentPosition, dreadnought.pilot.flags)
+local newPosition = dreadnought.autopilot(
+	dreadnought.balance,
+	dreadnought.pilot.aetherbeastsPresent,
+	dreadnought.aetherbeastsTotal,
+	dreadnought.pilot.currentPosition,
+	dreadnought.pilot.flags
+)
 
 if newPosition ~= 0 then
 	dreadnought.pilot.currentPosition = newPosition
-end
-</script>
+end</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>0</conditonLineDelta>
                         <mStayOpen>0</mStayOpen>
@@ -422,13 +440,17 @@ end
                         <name>Freed From Shockwave</name>
                         <script>dreadnought.pilot.flags.shocked = false
 
-local newPosition = dreadnought.autopilot(dreadnought.balance, dreadnought.pilot.aetherbeastsPresent,
-		dreadnought.aetherbeastsTotal, dreadnought.pilot.currentPosition, dreadnought.pilot.flags)
+local newPosition = dreadnought.autopilot(
+	dreadnought.balance,
+	dreadnought.pilot.aetherbeastsPresent,
+	dreadnought.aetherbeastsTotal,
+	dreadnought.pilot.currentPosition,
+	dreadnought.pilot.flags
+)
 
 if newPosition ~= 0 then
 	dreadnought.pilot.currentPosition = newPosition
-end
-</script>
+end</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>0</conditonLineDelta>
                         <mStayOpen>0</mStayOpen>
@@ -456,14 +478,19 @@ end
 
 if dreadnought.aetherbeastsTotal &gt; 0 then
 	dreadnought.aetherbeastsTotal = dreadnought.aetherbeastsTotal - 1
+
+	if dreadnought.aetherbeastsTotal == 0 then
+		dreadnought.pilot.flags.siphonCallout = true
+	end
 end
 
-if dreadnought.aetherbeastsTotal == 0 then
-	dreadnought.pilot.flags.siphonCallout = true
-end
-
-local newPosition = dreadnought.autopilot(dreadnought.balance, dreadnought.pilot.aetherbeastsPresent,
-		dreadnought.aetherbeastsTotal, dreadnought.pilot.currentPosition, dreadnought.pilot.flags)
+local newPosition = dreadnought.autopilot(
+	dreadnought.balance,
+	dreadnought.pilot.aetherbeastsPresent,
+	dreadnought.aetherbeastsTotal,
+	dreadnought.pilot.currentPosition,
+	dreadnought.pilot.flags
+)
 
 if newPosition ~= 0 then
 	dreadnought.pilot.currentPosition = newPosition
@@ -492,8 +519,13 @@ end
                         <name>Pilot Balance</name>
                         <script>dreadnought.balance = true
 
-local newPosition = dreadnought.autopilot(dreadnought.balance, dreadnought.pilot.aetherbeastsPresent,
-		dreadnought.aetherbeastsTotal, dreadnought.pilot.currentPosition, dreadnought.pilot.flags)
+local newPosition = dreadnought.autopilot(
+	dreadnought.balance,
+	dreadnought.pilot.aetherbeastsPresent,
+	dreadnought.aetherbeastsTotal,
+	dreadnought.pilot.currentPosition,
+	dreadnought.pilot.flags
+)
 
 if newPosition ~= 0 then
 	dreadnought.pilot.currentPosition = newPosition
@@ -517,14 +549,18 @@ end
                         </regexCodePropertyList>
                     </Trigger>
                     <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                        <name>Autopilot Movement Failsafe</name>
-                        <script>tempTimer(5, function ()
-	dreadnought.pilot.currentPosition = dreadnought.autopilotFailsafe(
+                        <name>Autopilot Failsafe</name>
+                        <script>tempTimer(4, function ()
+	local newPosition = dreadnought.autopilotFailsafe(
 		dreadnought.pilot.balance,
 		dreadnought.pilot.currentPosition,
 		dreadnought.aetherbeastsTotal,
 		dreadnought.pilot.flags
 	)
+
+	if newPosition ~= 0 then
+		dreadnought.pilot.currentPosition = newPosition
+	end
 end)</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>0</conditonLineDelta>
@@ -537,12 +573,10 @@ end)</script>
                         <colorTriggerFgColor>#000000</colorTriggerFgColor>
                         <colorTriggerBgColor>#000000</colorTriggerBgColor>
                         <regexCodeList>
-                            <string>^You steer(?:\s\w+(?:\'\w+)?)+ to the \w+\.$</string>
-                            <string>^With a ripple,(?:\s\w+(?:\'\w+)?)+ frees itself from its shockwave\.$</string>
-                            <string>The command chair whirrs quietly, ready to be used once again.</string>
+                            <string>^(?:\w+\s){3}suddenly explodes\!$</string>
+                            <string>A six-headed scyllus suddenly explodes!</string>
                         </regexCodeList>
                         <regexCodePropertyList>
-                            <integer>1</integer>
                             <integer>1</integer>
                             <integer>3</integer>
                         </regexCodePropertyList>
@@ -1722,7 +1756,7 @@ dreadnought.fireTurret(dreadnought.combateer.targets, dreadnought.combateer.flag
                     </regexCodePropertyList>
                 </Trigger>
             </TriggerGroup>
-            <TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+            <TriggerGroup isActive="no" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                 <name>Collector</name>
                 <script></script>
                 <triggerType>0</triggerType>
@@ -2563,7 +2597,7 @@ end</script>
                     <regex></regex>
                 </Alias>
             </AliasGroup>
-            <AliasGroup isActive="yes" isFolder="yes">
+            <AliasGroup isActive="no" isFolder="yes">
                 <name>Collector</name>
                 <script></script>
                 <command></command>
@@ -2698,10 +2732,10 @@ disableAlias(&quot;Pilot&quot;)
 disableTrigger(&quot;Empath&quot;)
 disableAlias(&quot;Empath&quot;)
 
-disableTrigger(&quot;Gunner&quot;)
+disableTrigger(&quot;Combateer&quot;)
 disableTrigger(&quot;Targetting - Auto&quot;)
 disableTrigger(&quot;Targetting - Callout&quot;)
-disableAlias(&quot;Gunner&quot;)
+disableAlias(&quot;Combateer&quot;)
 
 disableTrigger(&quot;Collector&quot;)
 disableTrigger(&quot;Siphoning - Auto&quot;)
@@ -2718,141 +2752,10 @@ dmsg(&quot;All Dreadnought reflexes have been disabled.&quot;)</script>
     <ActionPackage/>
     <ScriptPackage>
         <ScriptGroup isActive="yes" isFolder="yes">
-            <name>Data Structures</name>
-            <packageName></packageName>
-            <script>-------------------------------------------------
---         Put your Lua functions here.        --
---                                             --
--- Note that you can also use external Scripts --
--------------------------------------------------
-</script>
-            <eventHandlerList/>
-            <Script isActive="yes" isFolder="no">
-                <name>Heap</name>
-                <packageName></packageName>
-                <script>heap = {
-	new = function()
-		return {
-			size = 0,
-			elements = {}
-	}
-	end,
-
-	_lowerPriority = function (x, y)
-		-- X and Y are &quot;actions&quot;, as defined in the Action script.
-		assert(type(x) == &quot;table&quot;)
-		assert(type(y) == &quot;table&quot;)
-
-		assert(type(x.priority) == &quot;number&quot;)
-		assert(type(y.priority) == &quot;number&quot;)
-
-		return x.priority &gt;= y.priority
-	end,
-
-	_exch = function(h, x, y)
-		assert(type(x) == &quot;number&quot;)
-		assert(type(y) == &quot;number&quot;)
-
-		local temp = h.elements[x]
-		h.elements[x] = h.elements[y]
-		h.elements[y] = temp
-	end,
-
-	_sink = function (h, parentIndex)
-		local N = h.size
-
-		while (parentIndex*2) &lt;= N do
-			local childIndex = parentIndex * 2
-			
-			if childIndex &lt; N and heap._lowerPriority(h.elements[childIndex],
-																										h.elements[childIndex+1]) then
-				childIndex = childIndex + 1
-			end
-
-			if not heap._lowerPriority(h.elements[parentIndex], h.elements[childIndex]) then
-				break
-			else
-				heap._exch(h, parentIndex, childIndex)
-				parentIndex = childIndex
-			end
-		end
-	end,
-
-	_swim = function (h, childIndex)
-		while childIndex &gt; 1 and heap._lowerPriority(h.elements[math.floor(childIndex/2)],
-																											h.elements[childIndex]) do
-			local parentIndex = math.floor(childIndex / 2)
-			heap._exch(h, childIndex, parentIndex)
-			childIndex = parentIndex
-		end
-	end,
-
-	insert = function (h, element)
-		table.insert(h.elements, element)
-		h.size = h.size + 1
-
-		heap._swim(h, h.size)
-	end,
-
-	extract = function (h)		
-		heap._exch(h, 1, h.size)
-		h.size = h.size - 1
-		local ret = table.remove(h.elements)
-		
-		heap._sink(h, 1)
-
-		return ret
-	end,
-
-	head = function (h)
-		local element = h.elements[1]
-		return element
-	end
-}</script>
-                <eventHandlerList/>
-            </Script>
-            <Script isActive="yes" isFolder="no">
-                <name>Action</name>
-                <packageName></packageName>
-                <script>function action(name, priority, command)
-  assert(type(name) == &quot;string&quot;)
-  assert(type(priority) == &quot;number&quot;)
-  assert(type(command) == &quot;function&quot; or type(command) == &quot;string&quot;)
-
-	local aethercraftCommand = function() end
-
-	if type(command) == &quot;string&quot; then
-		aethercraftCommand = function()
-			send(command)
-   end
-	else
-		aethercraftCommand = function()
-			command()
-		end
-	end
-  
-	local action = {
-		name = name,
-		priority = priority,
-		command = aethercraftCommand
-	}
-  
-	setmetatable(action, {
-		__lt = function(a, b)
-			return a.priority &lt; b.priority
-		end
-	})
-
-	return action
-end</script>
-                <eventHandlerList/>
-            </Script>
-        </ScriptGroup>
-        <ScriptGroup isActive="yes" isFolder="yes">
             <name>Dreadnought</name>
             <packageName></packageName>
             <script>dreadnought = dreadnought or {
-	version = &quot;2.0&quot;,
+	version = &quot;2.0.1&quot;,
 	aetherbeastsTotal = 0,
 	balance = true,
 	skills = {},
@@ -2934,9 +2837,10 @@ end
 
 	if balance and not flags.shocked and aetherbeastsTotal == 0 then
 		positions = dreadnought.findHome(currentPosition)
+		send(&quot;pilot steer &quot; .. positions.nextPosition)
 	end
 
-	send(&quot;pilot steer &quot; .. positions.nextPosition)
+	
 	return positions.currentPosition
 end</script>
                     <eventHandlerList/>
@@ -3195,6 +3099,137 @@ if string.find(line, &quot;%d-hull, .*&quot;) then
 	deleteLine()
 end
 ]])
+end</script>
+                <eventHandlerList/>
+            </Script>
+        </ScriptGroup>
+        <ScriptGroup isActive="yes" isFolder="yes">
+            <name>Data Structures</name>
+            <packageName></packageName>
+            <script>-------------------------------------------------
+--         Put your Lua functions here.        --
+--                                             --
+-- Note that you can also use external Scripts --
+-------------------------------------------------
+</script>
+            <eventHandlerList/>
+            <Script isActive="yes" isFolder="no">
+                <name>Heap</name>
+                <packageName></packageName>
+                <script>heap = {
+	new = function()
+		return {
+			size = 0,
+			elements = {}
+	}
+	end,
+
+	_lowerPriority = function (x, y)
+		-- X and Y are &quot;actions&quot;, as defined in the Action script.
+		assert(type(x) == &quot;table&quot;)
+		assert(type(y) == &quot;table&quot;)
+
+		assert(type(x.priority) == &quot;number&quot;)
+		assert(type(y.priority) == &quot;number&quot;)
+
+		return x.priority &gt;= y.priority
+	end,
+
+	_exch = function(h, x, y)
+		assert(type(x) == &quot;number&quot;)
+		assert(type(y) == &quot;number&quot;)
+
+		local temp = h.elements[x]
+		h.elements[x] = h.elements[y]
+		h.elements[y] = temp
+	end,
+
+	_sink = function (h, parentIndex)
+		local N = h.size
+
+		while (parentIndex*2) &lt;= N do
+			local childIndex = parentIndex * 2
+			
+			if childIndex &lt; N and heap._lowerPriority(h.elements[childIndex],
+																										h.elements[childIndex+1]) then
+				childIndex = childIndex + 1
+			end
+
+			if not heap._lowerPriority(h.elements[parentIndex], h.elements[childIndex]) then
+				break
+			else
+				heap._exch(h, parentIndex, childIndex)
+				parentIndex = childIndex
+			end
+		end
+	end,
+
+	_swim = function (h, childIndex)
+		while childIndex &gt; 1 and heap._lowerPriority(h.elements[math.floor(childIndex/2)],
+																											h.elements[childIndex]) do
+			local parentIndex = math.floor(childIndex / 2)
+			heap._exch(h, childIndex, parentIndex)
+			childIndex = parentIndex
+		end
+	end,
+
+	insert = function (h, element)
+		table.insert(h.elements, element)
+		h.size = h.size + 1
+
+		heap._swim(h, h.size)
+	end,
+
+	extract = function (h)		
+		heap._exch(h, 1, h.size)
+		h.size = h.size - 1
+		local ret = table.remove(h.elements)
+		
+		heap._sink(h, 1)
+
+		return ret
+	end,
+
+	head = function (h)
+		local element = h.elements[1]
+		return element
+	end
+}</script>
+                <eventHandlerList/>
+            </Script>
+            <Script isActive="yes" isFolder="no">
+                <name>Action</name>
+                <packageName></packageName>
+                <script>function action(name, priority, command)
+  assert(type(name) == &quot;string&quot;)
+  assert(type(priority) == &quot;number&quot;)
+  assert(type(command) == &quot;function&quot; or type(command) == &quot;string&quot;)
+
+	local aethercraftCommand = function() end
+
+	if type(command) == &quot;string&quot; then
+		aethercraftCommand = function()
+			send(command)
+   end
+	else
+		aethercraftCommand = function()
+			command()
+		end
+	end
+  
+	local action = {
+		name = name,
+		priority = priority,
+		command = aethercraftCommand
+	}
+  
+	setmetatable(action, {
+		__lt = function(a, b)
+			return a.priority &lt; b.priority
+		end
+	})
+
+	return action
 end</script>
                 <eventHandlerList/>
             </Script>
