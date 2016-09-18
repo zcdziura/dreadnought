@@ -103,7 +103,7 @@ send(&quot;config aethermap off&quot;, false)
 
 local reset = dreadnought.reset.empath()
 dreadnought.aetherbeastsTotal = reset.aetherbeastsTotal
-dreadnought.currentModule = matches[2]
+dreadnought.currentModule = &quot;grid&quot;
 dreadnought.empath = reset.empath
 
 sendGMCP([[Char.Skills.Get {&quot;group&quot;:&quot;aethercraft&quot;}]])
@@ -164,14 +164,16 @@ enableTrigger(&quot;Targetting - Callout&quot;)
 send(&quot;config shipsight 0&quot;, false)
 send(&quot;config aethermap off&quot;, false)
 
-dreadnought.currentModule = matches[2]
-
-sendGMCP([[Char.Skills.Get {&quot;group&quot;:&quot;aethercraft&quot;}]])
-send(&quot;\n&quot;)
-deleteLineP()
+local reset = dreadnought.reset.combateer()
+dreadnought.aetherbeastsTotal = reset.aetherbeastsTotal
+dreadnought.currentModule = &quot;turret&quot;
+dreadnought.combateer = reset.combateer
 
 enableTrigger(&quot;Turret Setup&quot;)
-send(&quot;p turret&quot;, false)</script>
+send(&quot;p turret&quot;, false)
+
+sendGMCP([[Char.Skills.Get {&quot;group&quot;:&quot;aethercraft&quot;}]])
+send(&quot;\n&quot;)</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>39</conditonLineDelta>
                     <mStayOpen>0</mStayOpen>
@@ -183,10 +185,10 @@ send(&quot;p turret&quot;, false)</script>
                     <colorTriggerFgColor>#000000</colorTriggerFgColor>
                     <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
-                        <string>^You step up to a battle (\w+), locking yourself into the module and linking your mind to the controls of the ship\. After a moment, you begin to sense your command of the module in your own brain\.$</string>
+                        <string>You step up to a battle turret, locking yourself into the module and linking your mind to the controls of the ship. After a moment, you begin to sense your command of the module in your own brain.</string>
                     </regexCodeList>
                     <regexCodePropertyList>
-                        <integer>1</integer>
+                        <integer>3</integer>
                     </regexCodePropertyList>
                 </Trigger>
                 <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
@@ -198,7 +200,10 @@ disableTrigger(&quot;Targetting - Callout&quot;)
 send(&quot;config shipsight 0&quot;, false)
 send(&quot;config aethermap off&quot;, false)
 
-dreadnought.currentModule = &quot;&quot;</script>
+local reset = dreadnought.reset.combateer()
+dreadnought.aetherbeastsTotal = reset.aetherbeastsTotal
+dreadnought.currentModule = matches[2]
+dreadnought.combateer = reset.combateer</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
                     <mStayOpen>0</mStayOpen>
@@ -511,12 +516,10 @@ end
                         <colorTriggerFgColor>#000000</colorTriggerFgColor>
                         <colorTriggerBgColor>#000000</colorTriggerBgColor>
                         <regexCodeList>
-                            <string>^(?:\w+\s){3}suddenly explodes\!$</string>
-                            <string>A six-headed scyllus suddenly explodes!</string>
+                            <string>^(?:\w+(?:\-\w+)?\s){3}suddenly explodes\!$</string>
                         </regexCodeList>
                         <regexCodePropertyList>
                             <integer>1</integer>
-                            <integer>3</integer>
                         </regexCodePropertyList>
                     </Trigger>
                     <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
@@ -572,7 +575,7 @@ end
                     <name>Shockwave Timer</name>
                     <script>table.insert(dreadnought.pilot.shockwaveTimers, tempTimer(3420, function () -- Fire after 57 minutes
 	flowerbox(&quot;red&quot;, &quot;YOUR SHOCKWAVES ARE ABOUT TO EXPIRE!!&quot;)
-	send(&quot;shipt The shockwaves are about to expire. We'll stop and collect the dust until then.&quot;)
+	send(&quot;shipt The shockwaves are about to expire. We'll stop and collect the dust until then.&quot;, false)
 	killTimer(table.remove(dreadnought.pilot.shockwaveTimers, 1))
 	dreadnought.pilot.flags.siphonCallout = false
 	disableTrigger(&quot;Siphon Callout&quot;)
@@ -621,26 +624,6 @@ resetFormat()</script>
                         <integer>3</integer>
                         <integer>1</integer>
                         <integer>3</integer>
-                    </regexCodePropertyList>
-                </Trigger>
-                <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                    <name>Gnome traders</name>
-                    <script>send(&quot;pilot steer &quot; ..matches[2])</script>
-                    <triggerType>0</triggerType>
-                    <conditonLineDelta>39</conditonLineDelta>
-                    <mStayOpen>0</mStayOpen>
-                    <mCommand></mCommand>
-                    <packageName></packageName>
-                    <mFgColor>#ff0000</mFgColor>
-                    <mBgColor>#ffff00</mBgColor>
-                    <mSoundFile></mSoundFile>
-                    <colorTriggerFgColor>#000000</colorTriggerFgColor>
-                    <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                    <regexCodeList>
-                        <string>glides off towards the (\w+)\.$</string>
-                    </regexCodeList>
-                    <regexCodePropertyList>
-                        <integer>1</integer>
                     </regexCodePropertyList>
                 </Trigger>
             </TriggerGroup>
@@ -907,7 +890,7 @@ dreadnought.repairShip(dreadnought.actions)</script>
                     <regexCodePropertyList/>
                     <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>Call</name>
-                        <script>if dreadnought.empath.flags.haveClarity then
+                        <script>if dreadnought.empath.skills.Purser then
 	dreadnought.heap.insert(dreadnought.actions,
 		dreadnought.action(&quot;clarity&quot;, 4, &quot;grid clarity &quot; .. dreadnought.empath.modules.chair))
 else
@@ -932,7 +915,7 @@ end</script>
                     </Trigger>
                     <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>Emergency</name>
-                        <script>if dreadnought.empath.flags.haveClarity then
+                        <script>if dreadnought.empath.skills.Purser then
 	dreadnought.heap.insert(dreadnought.actions,
 		dreadnought.action(&quot;emergency clarity&quot;, 1, &quot;grid clarity &quot; .. dreadnought.empath.modules.chair))
 else
@@ -985,7 +968,7 @@ action.postCommand()</script>
                     </Trigger>
                     <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>Aetherbeast Dead</name>
-                        <script>if dreadnought.empath.flags.haveClarity then
+                        <script>if dreadnought.empath.skills.Purser then
 	dreadnought.heap.insert(dreadnought.actions,
 		dreadnought.action(&quot;emergency clarity&quot;, 1, &quot;grid clarity &quot; .. dreadnought.empath.modules.chair))
 end</script>
@@ -1007,27 +990,6 @@ end</script>
                         </regexCodePropertyList>
                     </Trigger>
                 </TriggerGroup>
-                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                    <name>Slivven Check</name>
-                    <script>dreadnought.empath.flags.checkSlivven = true
-send(&quot;grid modules&quot;, false)</script>
-                    <triggerType>0</triggerType>
-                    <conditonLineDelta>0</conditonLineDelta>
-                    <mStayOpen>0</mStayOpen>
-                    <mCommand></mCommand>
-                    <packageName></packageName>
-                    <mFgColor>#ff0000</mFgColor>
-                    <mBgColor>#ffff00</mBgColor>
-                    <mSoundFile></mSoundFile>
-                    <colorTriggerFgColor>#000000</colorTriggerFgColor>
-                    <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                    <regexCodeList>
-                        <string>^\(Ship\): \w+ (?:say|says), &quot;Check\.&quot;$</string>
-                    </regexCodeList>
-                    <regexCodePropertyList>
-                        <integer>1</integer>
-                    </regexCodePropertyList>
-                </Trigger>
                 <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Grid Setup</name>
                     <script>if matches[2] == &quot;chair&quot; then
@@ -1084,6 +1046,120 @@ dmsg(&quot;The empathic grid is set up and ready for your control.&quot;)</scrip
                         </regexCodePropertyList>
                     </Trigger>
                 </Trigger>
+                <TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <name>Launch Setup</name>
+                    <script></script>
+                    <triggerType>0</triggerType>
+                    <conditonLineDelta>0</conditonLineDelta>
+                    <mStayOpen>0</mStayOpen>
+                    <mCommand></mCommand>
+                    <packageName></packageName>
+                    <mFgColor>#ff0000</mFgColor>
+                    <mBgColor>#ffff00</mBgColor>
+                    <mSoundFile></mSoundFile>
+                    <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                    <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                    <regexCodeList/>
+                    <regexCodePropertyList/>
+                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                        <name>Launch</name>
+                        <script>if dreadnought.empath.skills.FirstMate then
+	dreadnought.heap.insert(dreadnought.actions,
+		dreadnought.action(&quot;planarbond&quot;, 1, &quot;grid planarbond&quot;))
+	dreadnought.heap.insert(dreadnought.actions,
+		dreadnought.action(&quot;covey&quot;, 1, &quot;grid covey&quot;))
+end</script>
+                        <triggerType>0</triggerType>
+                        <conditonLineDelta>0</conditonLineDelta>
+                        <mStayOpen>0</mStayOpen>
+                        <mCommand></mCommand>
+                        <packageName></packageName>
+                        <mFgColor>#ff0000</mFgColor>
+                        <mBgColor>#ffff00</mBgColor>
+                        <mSoundFile></mSoundFile>
+                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                        <regexCodeList>
+                            <string>^(?:\w+\s?)+ into the aetherways\.$</string>
+                        </regexCodeList>
+                        <regexCodePropertyList>
+                            <integer>1</integer>
+                        </regexCodePropertyList>
+                    </Trigger>
+                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                        <name>Covey</name>
+                        <script>local action = dreadnought.heap.head(dreadnought.actions)
+
+if action.name == &quot;covey&quot; then
+	dreadnought.heap.extract(dreadnought.actions)
+end
+
+action.postCommand()</script>
+                        <triggerType>0</triggerType>
+                        <conditonLineDelta>0</conditonLineDelta>
+                        <mStayOpen>0</mStayOpen>
+                        <mCommand></mCommand>
+                        <packageName></packageName>
+                        <mFgColor>#ff0000</mFgColor>
+                        <mBgColor>#ffff00</mBgColor>
+                        <mSoundFile></mSoundFile>
+                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                        <regexCodeList>
+                            <string>^You point out to (?:\w+\s?)+ that \w+ has a covey\.$</string>
+                        </regexCodeList>
+                        <regexCodePropertyList>
+                            <integer>1</integer>
+                        </regexCodePropertyList>
+                    </Trigger>
+                    <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                        <name>Planarbond</name>
+                        <script>local action = dreadnought.heap.head(dreadnought.actions)
+
+if action.name == &quot;planarbond&quot; then
+	dreadnought.heap.extract(dreadnought.actions)
+end
+
+action.postCommand()</script>
+                        <triggerType>0</triggerType>
+                        <conditonLineDelta>0</conditonLineDelta>
+                        <mStayOpen>0</mStayOpen>
+                        <mCommand></mCommand>
+                        <packageName></packageName>
+                        <mFgColor>#ff0000</mFgColor>
+                        <mBgColor>#ffff00</mBgColor>
+                        <mSoundFile></mSoundFile>
+                        <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                        <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                        <regexCodeList>
+                            <string>^You direct (?:\w+\s?)+ to form a deep planar bond with the crew, rooting each of them to the distant aetherwaves\.$</string>
+                        </regexCodeList>
+                        <regexCodePropertyList>
+                            <integer>1</integer>
+                        </regexCodePropertyList>
+                    </Trigger>
+                </TriggerGroup>
+                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <name>Slivven Check</name>
+                    <script>dreadnought.empath.flags.checkSlivven = true
+send(&quot;grid modules&quot;, false)</script>
+                    <triggerType>0</triggerType>
+                    <conditonLineDelta>0</conditonLineDelta>
+                    <mStayOpen>0</mStayOpen>
+                    <mCommand></mCommand>
+                    <packageName></packageName>
+                    <mFgColor>#ff0000</mFgColor>
+                    <mBgColor>#ffff00</mBgColor>
+                    <mSoundFile></mSoundFile>
+                    <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                    <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                    <regexCodeList>
+                        <string>^\(Ship\): \w+ (?:say|says), &quot;Check\.&quot;$</string>
+                    </regexCodeList>
+                    <regexCodePropertyList>
+                        <integer>1</integer>
+                    </regexCodePropertyList>
+                </Trigger>
             </TriggerGroup>
             <TriggerGroup isActive="no" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                 <name>Combateer</name>
@@ -1100,12 +1176,12 @@ dmsg(&quot;The empathic grid is set up and ready for your control.&quot;)</scrip
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList/>
                 <regexCodePropertyList/>
-                <TriggerGroup isActive="no" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="yes" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <TriggerGroup isActive="no" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Turret Setup</name>
                     <script></script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
-                    <mStayOpen>13</mStayOpen>
+                    <mStayOpen>10</mStayOpen>
                     <mCommand></mCommand>
                     <packageName></packageName>
                     <mFgColor>#ff0000</mFgColor>
@@ -1181,7 +1257,10 @@ disableTrigger(&quot;Turret Setup&quot;)</script>
                     <regexCodePropertyList/>
                     <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>Aetherbeast Summoned</name>
-                        <script>table.insert(dreadnought.combateer.targets, matches[2])
+                        <script>dreadnought.heap.insert(dreadnought.actions,
+	dreadnought.action(&quot;target&quot;, 3, &quot;turret target creature &quot; ..matches[2]))
+dreadnought.heap.insert(dreadnought.actions,
+	dreadnought.action(&quot;fire at creature&quot;, 4, &quot;turret fire&quot;))
 dreadnought.fireTurret()</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>99</conditonLineDelta>
@@ -1204,8 +1283,12 @@ dreadnought.fireTurret()</script>
                     </Trigger>
                     <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>Karibidean Summoned</name>
-                        <script>table.insert(dreadnought.combateer.targets, &quot;karibidean&quot;)
-dreadnought.fireTurret()</script>
+                        <script>dreadnought.heap.insert(dreadnought.actions,
+	dreadnought.action(&quot;target karibidean&quot;, 5, &quot;turret target creature karibidean&quot;))
+dreadnought.heap.insert(dreadnought.actions,
+	dreadnought.action(&quot;fire on karibidean&quot;, 6, &quot;turret fire&quot;))
+
+dreadnought.fireTurret(dreadnought.actions)</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>0</conditonLineDelta>
                         <mStayOpen>0</mStayOpen>
@@ -1241,8 +1324,26 @@ dreadnought.fireTurret()</script>
                     <regexCodePropertyList/>
                     <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>Targeting</name>
-                        <script>table.insert(dreadnought.combateer.targets, matches[2])
-dreadnought.fireTurret()</script>
+                        <script>if matches[2] ~= &quot;&quot; then
+	dreadnought.heap.insert(dreadnought.actions,
+		dreadnought.action(&quot;target ship&quot;, 1, &quot;turret target ship &quot; ..matches[3]))
+	dreadnought.heap.insert(dreadnought.actions,
+		dreadnought.action(&quot;fire on ship&quot;, 2, &quot;turret fire&quot;))
+else
+	if matches[2] == &quot;karibidean&quot; then
+		dreadnought.heap.insert(dreadnought.actions,
+			dreadnought.action(&quot;target karibidean&quot;, 5, &quot;turret target creature karibidean&quot;))
+		dreadnought.heap.insert(dreadnought.actions,
+			dreadnought.action(&quot;fire on karibidean&quot;, 6, &quot;turret fire&quot;))
+	else
+		dreadnought.heap.insert(dreadnought.actions,
+			dreadnought.action(&quot;target creature&quot;, 3, &quot;turret target creature &quot; ..matches[3]))
+		dreadnought.heap.insert(dreadnought.actions,
+			dreadnought.action(&quot;fire on creature&quot;, 4, &quot;turret fire&quot;))
+	end
+end
+
+dreadnought.fireTurret(dreadnought.actions)</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>99</conditonLineDelta>
                         <mStayOpen>0</mStayOpen>
@@ -1254,8 +1355,8 @@ dreadnought.fireTurret()</script>
                         <colorTriggerFgColor>#000000</colorTriggerFgColor>
                         <colorTriggerBgColor>#000000</colorTriggerBgColor>
                         <regexCodeList>
-                            <string>^\(Ship\): \w+ says, &quot;Target (\w+)\.&quot;$</string>
-                            <string>^\(Ship\): \w+ says, &quot;Gunners, train your sights upon the (\w+)\.&quot;$</string>
+                            <string>^\(Ship\): \w+ (?:say|says), &quot;Target (the aethership )?(\w+)\.&quot;$</string>
+                            <string>^\(Ship\): \w+ (?:say|says), &quot;Gunners, train your sights upon the (\w+)\.&quot;$</string>
                         </regexCodeList>
                         <regexCodePropertyList>
                             <integer>1</integer>
@@ -1264,29 +1365,14 @@ dreadnought.fireTurret()</script>
                     </Trigger>
                 </TriggerGroup>
                 <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                    <name>Turret Balance</name>
-                    <script>dreadnought.balance = true
-dreadnought.fireTurret()</script>
-                    <triggerType>0</triggerType>
-                    <conditonLineDelta>39</conditonLineDelta>
-                    <mStayOpen>0</mStayOpen>
-                    <mCommand></mCommand>
-                    <packageName></packageName>
-                    <mFgColor>#ff0000</mFgColor>
-                    <mBgColor>#ffff00</mBgColor>
-                    <mSoundFile></mSoundFile>
-                    <colorTriggerFgColor>#000000</colorTriggerFgColor>
-                    <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                    <regexCodeList>
-                        <string>A battle turret whirrs quietly, ready to be used once again.</string>
-                    </regexCodeList>
-                    <regexCodePropertyList>
-                        <integer>3</integer>
-                    </regexCodePropertyList>
-                </Trigger>
-                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Target Acquired</name>
-                    <script>dreadnought.combateer.flags.targetAcquired = true</script>
+                    <script>local action = dreadnought.heap.head(dreadnought.actions)
+
+if action.name == &quot;target ship&quot; or action.name == &quot;target creature&quot; or action.name == &quot;target karibidean&quot; then
+	dreadnought.heap.extract(dreadnought.actions)
+end
+
+action.postCommand()</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
                     <mStayOpen>0</mStayOpen>
@@ -1298,19 +1384,20 @@ dreadnought.fireTurret()</script>
                     <colorTriggerFgColor>#000000</colorTriggerFgColor>
                     <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
-                        <string>^You tune the weapon module to target a \w+ \w+\.$</string>
-                        <string>^You tune the weapon module to target a six-headed \w+\.$</string>
+                        <string>^You tune the weapon module to target (?:a|an) (?:\w+\-?\s?)+\.$</string>
+                        <string>No such creature is close enough for a battle turret to get a targeting lock.</string>
                     </regexCodeList>
                     <regexCodePropertyList>
                         <integer>1</integer>
-                        <integer>1</integer>
+                        <integer>3</integer>
                     </regexCodePropertyList>
                 </Trigger>
                 <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Vortex</name>
                     <script>if dreadnought.combateer.flags.canVortex then
-	dreadnought.combateer.flags.vortexCalled = true
-	dreadnought.fireTurret()
+	dreadnought.heap.insert(dreadnought.actions,
+		dreadnought.action(&quot;vortex&quot;, 5, &quot;turret vortex&quot;))
+	dreadnought.fireTurret(dreadnought.actions)
 end</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
@@ -1324,39 +1411,6 @@ end</script>
                     <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
                         <string>^\(Ship\): \w+ says, &quot;Vortex\.&quot;$</string>
-                        <string>^\(Ship\): \w+ says, &quot;Turret vortex.\&quot;$</string>
-                        <string>^\(Ship\): \w+ says, &quot;TURRET VORTEX.\&quot;$</string>
-                        <string>^\(Ship\): \w+ says, &quot;Turret Vortex\.&quot;$</string>
-                    </regexCodeList>
-                    <regexCodePropertyList>
-                        <integer>1</integer>
-                        <integer>1</integer>
-                        <integer>1</integer>
-                        <integer>1</integer>
-                    </regexCodePropertyList>
-                </Trigger>
-                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                    <name>Targetted Vortex</name>
-                    <script>if matches[2] == gmcp.Char.Name.name then
-	if dreadnought.combateer.flags.canVortex then
-		dreadnought.combateer.flags.vortexCalled = true
-		dreadnought.fireTurret()
-	else
-		send(&quot;I'm afraid this turret is unable to summon a vortex, Captain.&quot;)
-	end
-end</script>
-                    <triggerType>0</triggerType>
-                    <conditonLineDelta>99</conditonLineDelta>
-                    <mStayOpen>0</mStayOpen>
-                    <mCommand></mCommand>
-                    <packageName></packageName>
-                    <mFgColor>#ff0000</mFgColor>
-                    <mBgColor>#ffff00</mBgColor>
-                    <mSoundFile></mSoundFile>
-                    <colorTriggerFgColor>#000000</colorTriggerFgColor>
-                    <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                    <regexCodeList>
-                        <string>^\(Ship\): \w+ says, \&quot;(\w+), vortex.\&quot;$</string>
                     </regexCodeList>
                     <regexCodePropertyList>
                         <integer>1</integer>
@@ -1364,7 +1418,13 @@ end</script>
                 </Trigger>
                 <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Vortex Fired</name>
-                    <script>dreadnought.combateer.flags.vortexCalled = false</script>
+                    <script>local action = dreadnought.heap.head(dreadnought.actions)
+
+if action.name == &quot;vortex&quot; then
+	dreadnought.heap.extract(dreadnought.actions)
+end
+
+action.postCommand()</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
                     <mStayOpen>0</mStayOpen>
@@ -1386,8 +1446,11 @@ end</script>
                 </Trigger>
                 <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Shockwave</name>
-                    <script>dreadnought.combateer.flags.shockwaveCalled = true
-dreadnought.fireTurret()</script>
+                    <script>if dreadnought.combateer.skills.Shock then
+	dreadnought.heap.insert(dreadnought.actions,
+		dreadnought.action(&quot;shockwave&quot;, 3, &quot;turret shockwave&quot;))
+	dreadnought.fireTurret(dreadnought.actions)
+end</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>99</conditonLineDelta>
                     <mStayOpen>0</mStayOpen>
@@ -1399,38 +1462,23 @@ dreadnought.fireTurret()</script>
                     <colorTriggerFgColor>#000000</colorTriggerFgColor>
                     <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
-                        <string>^\(Ship\): (\w+) says, \&quot;Shockwave.\&quot;$</string>
+                        <string>^\(Ship\): \w+ says, \&quot;Shockwave.\&quot;$</string>
+                        <string>^(?:\w+\s)+lacks the power to do that\.$</string>
                     </regexCodeList>
                     <regexCodePropertyList>
                         <integer>1</integer>
-                    </regexCodePropertyList>
-                </Trigger>
-                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                    <name>Targetted Shockwave</name>
-                    <script>if matches[2] == gmcp.Char.Name.name then
-	dreadnought.combateer.flags.shockwaveCalled = true
-	dreadnought.fireTurret()
-end</script>
-                    <triggerType>0</triggerType>
-                    <conditonLineDelta>0</conditonLineDelta>
-                    <mStayOpen>0</mStayOpen>
-                    <mCommand></mCommand>
-                    <packageName></packageName>
-                    <mFgColor>#ff0000</mFgColor>
-                    <mBgColor>#ffff00</mBgColor>
-                    <mSoundFile></mSoundFile>
-                    <colorTriggerFgColor>#000000</colorTriggerFgColor>
-                    <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                    <regexCodeList>
-                        <string>^\(Ship\): \w+ says, \&quot;(\w+), shockwave.\&quot;$</string>
-                    </regexCodeList>
-                    <regexCodePropertyList>
                         <integer>1</integer>
                     </regexCodePropertyList>
                 </Trigger>
                 <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Shockwave Fired</name>
-                    <script>dreadnought.combateer.flags.shockwaveCalled = false</script>
+                    <script>local action = dreadnought.heap.head(dreadnought.actions)
+
+if action.name == &quot;shockwave&quot; then
+	dreadnought.heap.extract(dreadnought.actions)
+end
+
+action.postCommand()</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
                     <mStayOpen>0</mStayOpen>
@@ -1453,10 +1501,41 @@ end</script>
                     </regexCodePropertyList>
                 </Trigger>
                 <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <name>Turret Fired</name>
+                    <script>local action = dreadnought.heap.head(dreadnought.actions)
+
+if action.name == &quot;fire on ship&quot; or action.name == &quot;fire on creature&quot; then
+	action.postCommand()
+end</script>
+                    <triggerType>0</triggerType>
+                    <conditonLineDelta>0</conditonLineDelta>
+                    <mStayOpen>0</mStayOpen>
+                    <mCommand></mCommand>
+                    <packageName></packageName>
+                    <mFgColor>#ff0000</mFgColor>
+                    <mBgColor>#ffff00</mBgColor>
+                    <mSoundFile></mSoundFile>
+                    <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                    <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                    <regexCodeList>
+                        <string>The floor shakes as you fire a blast that slams into</string>
+                        <string>As you attempt to operate a battle turret, it sputters and gyrates without producing a noticeable result.</string>
+                    </regexCodeList>
+                    <regexCodePropertyList>
+                        <integer>2</integer>
+                        <integer>3</integer>
+                    </regexCodePropertyList>
+                </Trigger>
+                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Beast Dies</name>
-                    <script>table.remove(dreadnought.combateer.targets, 1)
-dreadnought.combateer.flags.targetAcquired = false
-dreadnought.fireTurret()</script>
+                    <script>local action = dreadnought.heap.head(dreadnought.actions)
+
+if action.name == &quot;fire on ship&quot; or action.name == &quot;fire on creature&quot; then
+	dreadnought.heap.extract(dreadnought.actions)	
+	action.postCommand()
+end
+
+dreadnought.fireTurret(dreadnought.actions)</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
                     <mStayOpen>0</mStayOpen>
@@ -1476,8 +1555,14 @@ dreadnought.fireTurret()</script>
                 </Trigger>
                 <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>No Target</name>
-                    <script>dreadnought.combateer.flags.targetAcquired = false
-table.remove(dreadnought.combateer.targets, 1)</script>
+                    <script>local action = dreadnought.heap.head(dreadnought.actions)
+
+if action.name == &quot;fire on ship&quot; or action.name == &quot;fire on creature&quot; then
+	dreadnought.heap.extract(dreadnought.actions)	
+	action.postCommand()
+end
+
+dreadnought.fireTurret(dreadnought.actions)</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
                     <mStayOpen>0</mStayOpen>
@@ -1500,7 +1585,7 @@ table.remove(dreadnought.combateer.targets, 1)</script>
                 <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Turret Exhaustion</name>
                     <script>send(&quot;shipt I'm exhausted, Captain! You should find me a replacement.&quot;)
-dreadnought.fireTurret()</script>
+dreadnought.fireTurret(dreadnought.actions)</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>99</conditonLineDelta>
                     <mStayOpen>0</mStayOpen>
@@ -1674,7 +1759,7 @@ end</script>
                     <regexCodePropertyList/>
                     <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>Siphoning Vortex</name>
-                        <script>send(&quot;shipt Siphoned from the vortex, Captain. My collector is now filled with &quot; ..matches[2]..&quot; energy.&quot;)</script>
+                        <script>send(&quot;shipt Siphoned from the vortex, Captain. My collector is now filled with &quot; ..matches[2]..&quot; energy.&quot;, false)</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>99</conditonLineDelta>
                         <mStayOpen>0</mStayOpen>
@@ -1714,7 +1799,7 @@ end</script>
                     </Trigger>
                     <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>Full Collector</name>
-                        <script>send(&quot;shipt My collector is full, Captain.&quot;)
+                        <script>send(&quot;shipt My collector is full, Captain.&quot;, false)
 disableTrigger(&quot;Siphoning - Auto&quot;)
 disableTrigger(&quot;Siphoning - Callout&quot;)</script>
                         <triggerType>0</triggerType>
@@ -1736,7 +1821,7 @@ disableTrigger(&quot;Siphoning - Callout&quot;)</script>
                     </Trigger>
                     <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>Exhaustion</name>
-                        <script>send(&quot;shipt I'm exhausted, Captain. You'll have to find a replacement for me.&quot;)
+                        <script>send(&quot;shipt I'm exhausted, Captain. You'll have to find a replacement for me.&quot;, false)
 dreadnought.siphonVortex(dreadnought.aetherbeastsTotal)</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>0</conditonLineDelta>
@@ -1756,6 +1841,48 @@ dreadnought.siphonVortex(dreadnought.aetherbeastsTotal)</script>
                         </regexCodePropertyList>
                     </Trigger>
                 </TriggerGroup>
+                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <name>Aetherbeast Enters</name>
+                    <script>dreadnought.aetherbeastsTotal = dreadnought.aetherbeastsTotal + 1</script>
+                    <triggerType>0</triggerType>
+                    <conditonLineDelta>0</conditonLineDelta>
+                    <mStayOpen>0</mStayOpen>
+                    <mCommand></mCommand>
+                    <packageName></packageName>
+                    <mFgColor>#ff0000</mFgColor>
+                    <mBgColor>#ffff00</mBgColor>
+                    <mSoundFile></mSoundFile>
+                    <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                    <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                    <regexCodeList>
+                        <string>^Drawn by the flux of energy, (?:a|an) \w+(?:\-\w+)? \w+ suddenly wanders into the nearby area\.$</string>
+                    </regexCodeList>
+                    <regexCodePropertyList>
+                        <integer>1</integer>
+                    </regexCodePropertyList>
+                </Trigger>
+                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <name>Aetherbeast Dies</name>
+                    <script>if dreadnought.aetherbeastsTotal &gt; 0 then
+	dreadnought.aetherbeastsTotal = dreadnought.aetherbeastsTotal - 1
+end</script>
+                    <triggerType>0</triggerType>
+                    <conditonLineDelta>0</conditonLineDelta>
+                    <mStayOpen>0</mStayOpen>
+                    <mCommand></mCommand>
+                    <packageName></packageName>
+                    <mFgColor>#ff0000</mFgColor>
+                    <mBgColor>#ffff00</mBgColor>
+                    <mSoundFile></mSoundFile>
+                    <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                    <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                    <regexCodeList>
+                        <string>^(?:\w+(?:\-\w+)?\s){3}suddenly explodes\!$</string>
+                    </regexCodeList>
+                    <regexCodePropertyList>
+                        <integer>1</integer>
+                    </regexCodePropertyList>
+                </Trigger>
             </TriggerGroup>
             <TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                 <name>Activate/Deactivate calls</name>
@@ -1922,6 +2049,26 @@ tempTimer(0.1, [[send(&quot;shipt Aye aye, Captain! Deactivating my collector&qu
                 <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList>
                     <string>implodes and your body is instantly torn apart by the unstable reality of the Aetherways\.$</string>
+                </regexCodeList>
+                <regexCodePropertyList>
+                    <integer>1</integer>
+                </regexCodePropertyList>
+            </Trigger>
+            <Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                <name>Gnome traders</name>
+                <script>send(&quot;pilot steer &quot; ..matches[2])</script>
+                <triggerType>0</triggerType>
+                <conditonLineDelta>39</conditonLineDelta>
+                <mStayOpen>0</mStayOpen>
+                <mCommand></mCommand>
+                <packageName></packageName>
+                <mFgColor>#ff0000</mFgColor>
+                <mBgColor>#ffff00</mBgColor>
+                <mSoundFile></mSoundFile>
+                <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                <regexCodeList>
+                    <string>glides off towards the (\w+)\.$</string>
                 </regexCodeList>
                 <regexCodePropertyList>
                     <integer>1</integer>
@@ -2239,10 +2386,11 @@ end</script>
                 <Alias isActive="yes" isFolder="no">
                     <name>Grid Repair</name>
                     <script>dmsg(&quot;Repairing the ship.&quot;)
+dreadnought.locked = false
 dreadnought.repairShip(dreadnought.actions)</script>
                     <command></command>
                     <packageName></packageName>
-                    <regex>^gr(?: (reset))?$</regex>
+                    <regex>^gr$</regex>
                 </Alias>
                 <Alias isActive="yes" isFolder="no">
                     <name>Slivven Check</name>
@@ -2255,7 +2403,7 @@ send(&quot;grid modules&quot;)</script>
                 <Alias isActive="yes" isFolder="no">
                     <name>Clarity</name>
                     <script>dreadnought.heap.insert(dreadnought.actions,
-	action(&quot;emergency clarity&quot;, 1, &quot;grid clarity &quot; .. dreadnought.empath.modules.chair))
+	dreadnought.action(&quot;emergency clarity&quot;, 1, &quot;grid clarity &quot; .. dreadnought.empath.modules.chair))
 dreadnought.repairShip(dreadnought.actions)</script>
                     <command></command>
                     <packageName></packageName>
@@ -2307,24 +2455,29 @@ end</script>
                 </Alias>
                 <Alias isActive="yes" isFolder="no">
                     <name>Set Target</name>
-                    <script>if matches[2] == &quot;reset&quot; then
-	dreadnought.combateer.targets = {}
-	dmsg(&quot;Resetting the list of targets&quot;)
-elseif matches[2] == &quot;list&quot; then
-	local msg = &quot;Current list of targets:&quot;
-	for _,t in ipairs(dreadnought.combateer.targets) do
-		msg = msg .. &quot; &quot; .. t
-	end
-
-	dmsg(msg)
+                    <script>if #matches &gt; 2 then
+	dreadnought.heap.insert(dreadnought.actions,
+		dreadnought.action(&quot;target ship&quot;, 1, &quot;turret target ship &quot; ..matches[2]))
+	dreadnought.heap.insert(dreadnought.actions,
+		dreadnought.action(&quot;fire on ship&quot;, 2, &quot;turret fire&quot;))
 else
-	table.insert(dreadnought.combateer.targets, matches[2])
-	dmsg(&quot;Adding to the list of targets: &quot; .. matches[2])
-	dreadnought.fireTurret()
-end</script>
+	if matches[2] == &quot;karibidean&quot; then
+		dreadnought.heap.insert(dreadnought.actions,
+			dreadnought.action(&quot;target karibidean&quot;, 5, &quot;turret target creature karibidean&quot;))
+		dreadnought.heap.insert(dreadnought.actions,
+			dreadnought.action(&quot;fire on karibidean&quot;, 6, &quot;turret fire&quot;))
+	else
+		dreadnought.heap.insert(dreadnought.actions,
+			dreadnought.action(&quot;target creature&quot;, 3, &quot;turret target creature &quot; ..matches[2]))
+		dreadnought.heap.insert(dreadnought.actions,
+			dreadnought.action(&quot;fire on creature&quot;, 4, &quot;turret fire&quot;))
+	end
+end
+
+dreadnought.fireTurret(dreadnought.actions)</script>
                     <command></command>
                     <packageName></packageName>
-                    <regex>^ttar (\w+)$</regex>
+                    <regex>^ttar (\w+)(?: (ship))?$</regex>
                 </Alias>
             </AliasGroup>
             <AliasGroup isActive="no" isFolder="yes">
@@ -2360,6 +2513,13 @@ end</script>
                 </Alias>
             </AliasGroup>
             <Alias isActive="yes" isFolder="no">
+                <name>Ship Look</name>
+                <script>send(&quot;ship look&quot;, false)</script>
+                <command></command>
+                <packageName></packageName>
+                <regex>^sl$</regex>
+            </Alias>
+            <Alias isActive="yes" isFolder="no">
                 <name>Finish Hunting</name>
                 <script>disableTrigger(&quot;Pilot&quot;)
 disableTrigger(&quot;Autopilot&quot;)
@@ -2368,15 +2528,17 @@ disableAlias(&quot;Pilot&quot;)
 disableTrigger(&quot;Empath&quot;)
 disableAlias(&quot;Empath&quot;)
 
-disableTrigger(&quot;Gunner&quot;)
+disableTrigger(&quot;Combateer&quot;)
 disableTrigger(&quot;Targetting - Auto&quot;)
 disableTrigger(&quot;Targetting - Callout&quot;)
-disableAlias(&quot;Gunner&quot;)
+disableAlias(&quot;Combateer&quot;)
 
 disableTrigger(&quot;Collector&quot;)
 disableTrigger(&quot;Siphoning - Auto&quot;)
 disableTrigger(&quot;Siphoning - Callout&quot;)
 disableAlias(&quot;Collector&quot;)
+
+dreadnought.actions = dreadnought.heap.new()
 
 dmsg(&quot;All Dreadnought reflexes have been disabled.&quot;)</script>
                 <command></command>
@@ -2416,7 +2578,7 @@ dmsg(&quot;All Dreadnought reflexes have been disabled.&quot;)</script>
 	assert(type(x.priority) == &quot;number&quot;)
 	assert(type(y.priority) == &quot;number&quot;)
 
-	return x.priority &gt;= y.priority
+	return x.priority &gt; y.priority
 end
 
 local exch = function(h, x, y)
@@ -2676,8 +2838,9 @@ end</script>
 		cube = &quot;&quot;
 	},
 
+	skills = {},
+
 	flags = {
-		haveClarity = false,
 		checkSlivven = false
 	},
 
@@ -2703,10 +2866,9 @@ function dreadnought.reset.empath()
 				cube = &quot;&quot;
 			},
 
-			commands = heap.new(),
+			skills = {},
 
 			flags = {
-				haveClarity = false,
 				checkSlivven = false
 			},
 
@@ -2725,40 +2887,27 @@ end</script>
 end</script>
                         <eventHandlerList/>
                     </Script>
-                    <Script isActive="yes" isFolder="no">
-                        <name>Setup</name>
-                        <packageName></packageName>
-                        <script>function dreadnought.setup.empath()
-	if gmcp.Char.Skills.List.list[29] == &quot;Purser&quot; then
-		dreadnought.empath.flags.haveClarity = true
-	end
-end
-
-registerAnonymousEventHandler(&quot;gmcp.Char.Skills.List&quot;, &quot;dreadnought.setup.empath&quot;)</script>
-                        <eventHandlerList/>
-                    </Script>
                 </ScriptGroup>
                 <ScriptGroup isActive="yes" isFolder="yes">
                     <name>Combateer</name>
                     <packageName></packageName>
                     <script>dreadnought.combateer = dreadnought.combateer or {
-	targets = {},
+	skills = {},
 	flags = {
-		targetAcquired = false,
-		canVortex = false,
-		vortexCalled = false,
-		shockwaveCalled = false
+		canVortex = false
 	}
 }
 
 function dreadnought.reset.combateer()
 	return {
 		aetherbeastsTotal = 0,
+		currentModule = &quot;&quot;,
 
 		combateer = {
-			targets = {},
-			
-
+			skills = {},
+			flags = {
+				canVortex = false
+			}
 		}
 	}
 end</script>
@@ -2766,24 +2915,13 @@ end</script>
                     <Script isActive="yes" isFolder="no">
                         <name>Fire Turret</name>
                         <packageName></packageName>
-                        <script>function dreadnought.fireTurret()
-	if dreadnought.balance then
-		if dreadnought.combateer.flags.shockwaveCalled then
-			send(&quot;turret shockwave&quot;)
-		elseif dreadnought.combateer.flags.vortexCalled then
-			send(&quot;turret vortex&quot;)
-		else
-			local currentTarget = dreadnought.combateer.targets[1]
-			if currentTarget ~= nil then
-				if dreadnought.combateer.flags.targetAcquired then
-					send(&quot;turret fire&quot;)
-				else
-					send(&quot;turret target creature &quot; .. currentTarget)
-				end
-			end
-		end
+                        <script>function dreadnought.fireTurret(actions)
+	if actions.size &gt; 0 then
+		dreadnought.heap.head(actions).command()
 	end
-end</script>
+end
+
+</script>
                         <eventHandlerList/>
                     </Script>
                 </ScriptGroup>
@@ -2797,7 +2935,7 @@ end</script>
                         <packageName></packageName>
                         <script>function dreadnought.siphonVortex(aetherbeastsTotal)
 	if aetherbeastsTotal == 0 then
-		send(&quot;siphon vortex&quot;)
+		send(&quot;siphon vortex&quot;, false)
 	else
 		send(&quot;shipt I don't think that's a good idea, Captain. There are aetherbeasts about!&quot;)
 	end
@@ -2811,13 +2949,64 @@ end</script>
                     <script></script>
                     <eventHandlerList/>
                     <Script isActive="yes" isFolder="no">
+                        <name>Skills Listener</name>
+                        <packageName></packageName>
+                        <script>local empathSkills = {
+	Empathy = true,
+	Armada = true,
+	Interlink = true,
+	Modules = true,
+	Trade = true,
+	Analyze = true,
+	Distribution = true,
+	Steward = true,
+	Astralsight = true,
+	Purser = true,
+	Scan = true,
+	Resonance = true
+}
+
+local combateerSkills = {
+	Battle = true,
+	Targeting = true,
+	Bombard = true,
+	Rupture = true,
+	Bosun = true,
+	TurretSiphon = true,
+	SecondMate = true,
+	Shock = true,
+	Clarionblast = true
+}
+
+function dreadnought.skillsListener()
+	if dreadnought.currentModule == &quot;grid&quot; then
+		for i,skill in ipairs(gmcp.Char.Skills.List.list) do
+			if empathSkills[skill] then
+				dreadnought.empath.skills[skill] = true
+			end
+		end
+	elseif dreadnought.currentModule == &quot;turret&quot; then
+		for i,skill in ipairs(gmcp.Char.Skills.List.list) do
+			if combateerSkills[skill] then
+				dreadnought.combateer.skills[skill] = true
+			end
+		end
+	end
+end
+
+registerAnonymousEventHandler(&quot;gmcp.Char.Skills.List&quot;, &quot;dreadnought.skillsListener&quot;)</script>
+                        <eventHandlerList/>
+                    </Script>
+                    <Script isActive="yes" isFolder="no">
                         <name>Balance Listener</name>
                         <packageName></packageName>
                         <script>function dreadnought.balanceListener()
 	if gmcp.Char.Vitals.modulebal == &quot;1&quot; then
 		dreadnought.balance = true
 
-		raiseEvent(&quot;dreadnought.onFireAction&quot;, dreadnought.currentModule)
+		if not dreadnought.locked then
+			raiseEvent(&quot;dreadnought.onFireAction&quot;, dreadnought.currentModule)
+		end
 	else
 		dreadnought.balance = false
 	end
@@ -2833,6 +3022,8 @@ registerAnonymousEventHandler(&quot;gmcp.Char.Vitals&quot;, &quot;dreadnought.ba
 	if currentModule ~= &quot;&quot; and not dreadnought.locked then
 		if currentModule == &quot;grid&quot; then
 			dreadnought.repairShip(dreadnought.actions)
+		elseif currentModule == &quot;turret&quot; then
+			dreadnought.fireTurret(dreadnought.actions)
 		end
 	end
 end
