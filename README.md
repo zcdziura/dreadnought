@@ -6,7 +6,7 @@ An automated aetherhunting system for Lusternia, written in Lua for the Mudlet c
 Installation
 ----------
 
-1. Click on the `releases` button above and download the latest `Source Code (zip)` file for the latest Dreadnought release.
+1. Click on the green button above labeled `Clone or download`. From the dropdown that appears, click `Download ZIP`.
 2. Extract the zip file somewhere on your computer (such as your Downloads folder).
 3. Open Mudlet. On the Menu Bar, click on `Package Manager`.
 4. Click on `Install`, navigate to the folder where you extracted the zip file, and select the `Dreadnought.xml` file.
