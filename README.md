@@ -6,6 +6,7 @@ An automated aetherhunting system for Lusternia, written in Lua for the Mudlet c
 Installation
 ----------
 
+0. Make sure that the GMCP is enabled before installing. You can double-check by clicking on the `Settings` button within Mudlet, and within the `General` tab there is a checkbox to "Enable GMCP". If not checked off, check that box, click "Save", then restart Mudlet.
 1. Click on the green button above labeled `Clone or download`. From the dropdown that appears, click `Download ZIP`.
 2. Extract the zip file somewhere on your computer (such as your Downloads folder).
 3. Open Mudlet. On the Menu Bar, click on `Package Manager`.

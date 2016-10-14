@@ -40,7 +40,7 @@ disableTrigger(&quot;Autopilot&quot;)
 send(&quot;config shipsight 1&quot;, false)
 send(&quot;config aethermap on&quot;, false)
 
-local reset = dreadnought.pilot.reset()
+local reset = dreadnought.reset.pilot()
 dreadnought.aetherbeastsTotal = reset.aetherbeastsTotal
 dreadnought.currentModule = matches[2]
 dreadnought.pilot = reset.pilot
@@ -72,7 +72,7 @@ disableTrigger(&quot;Autopilot&quot;)
 send(&quot;config shipsight 0&quot;, false)
 send(&quot;config aethermap off&quot;, false)
 
-local reset = dreadnought.pilot.reset()
+local reset = dreadnought.reset.pilot()
 dreadnought.aetherbeastsTotal = reset.aetherbeastsTotal
 dreadnought.currentModule = reset.currentModule
 dreadnought.pilot = reset.pilot</script>
@@ -731,66 +731,18 @@ dmsg(&quot;The empathic grid is set up and ready for your control.&quot;)</scrip
                         <regexCodeList/>
                         <regexCodePropertyList/>
                         <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                            <name>Damaged</name>
-                            <script>dreadnought.heap.insert(dreadnought.actions, dreadnought.action(&quot;hull&quot;, 2, &quot;grid repair hull&quot;))</script>
-                            <triggerType>0</triggerType>
-                            <conditonLineDelta>0</conditonLineDelta>
-                            <mStayOpen>0</mStayOpen>
-                            <mCommand></mCommand>
-                            <packageName></packageName>
-                            <mFgColor>#ff0000</mFgColor>
-                            <mBgColor>#ffff00</mBgColor>
-                            <mSoundFile></mSoundFile>
-                            <colorTriggerFgColor>#000000</colorTriggerFgColor>
-                            <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                            <regexCodeList>
-                                <string>concussive shock rips through the hull.$</string>
-                                <string>swiftly shears through her hull.$</string>
-                                <string>rips apart her hull.$</string>
-                                <string>shreds deep rends through her hull.$</string>
-                                <string>^Violet sparks fly through the air and </string>
-                                <string>^\(Ship\): \w+ says, \&quot;Repair.\&quot;$</string>
-                                <string> cries out as bolts of jagged energy strike out from the ruptured fabric of aetherspace here.$</string>
-                            </regexCodeList>
-                            <regexCodePropertyList>
-                                <integer>1</integer>
-                                <integer>1</integer>
-                                <integer>1</integer>
-                                <integer>1</integer>
-                                <integer>1</integer>
-                                <integer>1</integer>
-                                <integer>1</integer>
-                            </regexCodePropertyList>
-                        </Trigger>
-                        <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                            <name>Repairing</name>
-                            <script>dreadnought.heap.head(dreadnought.actions).postCommand()</script>
-                            <triggerType>0</triggerType>
-                            <conditonLineDelta>0</conditonLineDelta>
-                            <mStayOpen>0</mStayOpen>
-                            <mCommand></mCommand>
-                            <packageName></packageName>
-                            <mFgColor>#ff0000</mFgColor>
-                            <mBgColor>#ffff00</mBgColor>
-                            <mSoundFile></mSoundFile>
-                            <colorTriggerFgColor>#000000</colorTriggerFgColor>
-                            <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                            <regexCodeList>
-                                <string>^You send a surge of strength through the empathic grid</string>
-                            </regexCodeList>
-                            <regexCodePropertyList>
-                                <integer>1</integer>
-                            </regexCodePropertyList>
-                        </Trigger>
-                        <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                             <name>Repaired</name>
-                            <script>local action = dreadnought.heap.head(dreadnought.actions)
+                            <script>while dreadnought.actions.size &gt; 0 do
+	local action = dreadnought.heap.head(dreadnought.actions)
 
-if action.name == &quot;hull&quot; then
-	dreadnought.heap.extract(dreadnought.actions)
-end
+	action.postCommand()
 
-action.postCommand()</script>
+	if action.name == &quot;hull&quot; then
+		dreadnought.heap.extract(dreadnought.actions)
+	else
+		break
+	end
+end</script>
                             <triggerType>0</triggerType>
                             <conditonLineDelta>0</conditonLineDelta>
                             <mStayOpen>0</mStayOpen>
@@ -810,7 +762,7 @@ action.postCommand()</script>
                         </Trigger>
                     </TriggerGroup>
                     <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                        <name>Repair</name>
+                        <name>Modules</name>
                         <script>local module = matches[2]
 local id = matches[3]
 local damage = matches[4]
@@ -887,7 +839,9 @@ end</script>
 
 	dreadnought.empath.slivvensFound = 0
 	dreadnought.empath.flags.checkSlivven = false
-end</script>
+end
+
+dreadnought.repairShip(dreadnought.actions)</script>
                             <triggerType>0</triggerType>
                             <conditonLineDelta>0</conditonLineDelta>
                             <mStayOpen>0</mStayOpen>
@@ -909,12 +863,11 @@ end</script>
                     <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                         <name>Repairing</name>
                         <script>local action = dreadnought.heap.head(dreadnought.actions)
+action.postCommand()
 
-if matches[3] == &quot;fully&quot; and action.name == matches[2] then
+if action.name == matches[2] then
 	dreadnought.heap.extract(dreadnought.actions)
-end
-
-action.postCommand()</script>
+end</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>0</conditonLineDelta>
                         <mStayOpen>0</mStayOpen>
@@ -926,10 +879,16 @@ action.postCommand()</script>
                         <colorTriggerFgColor>#000000</colorTriggerFgColor>
                         <colorTriggerBgColor>#000000</colorTriggerBgColor>
                         <regexCodeList>
-                            <string>^Crackling energy surges to (?:\w+\s){2}(\w+), (\w+) healing it\.$</string>
+                            <string>You send a surge of strength through the empathic grid</string>
                             <string>As you attempt to operate the empathic grid, it sputters and gyrates without producing a noticeable result.</string>
+                            <string>The empathic grid is not yet ready to be used again.</string>
+                            <string>^Crackling energy surges to (?:a|an) \w+ (\w+), fully healing it\.$</string>
+                            <string>The empathic grid is not yet ready to be used again.</string>
                         </regexCodeList>
                         <regexCodePropertyList>
+                            <integer>2</integer>
+                            <integer>3</integer>
+                            <integer>3</integer>
                             <integer>1</integer>
                             <integer>3</integer>
                         </regexCodePropertyList>
@@ -1053,10 +1012,10 @@ action.postCommand()</script>
                         </regexCodePropertyList>
                     </Trigger>
                     <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                        <name>Aetherbeast Dead</name>
+                        <name>Target Destroyed</name>
                         <script>if dreadnought.empath.skills.Purser then
 	dreadnought.heap.insert(dreadnought.actions,
-		dreadnought.action(&quot;emergency clarity&quot;, 1, &quot;grid clarity &quot; .. dreadnought.empath.modules.chair))
+		dreadnought.action(&quot;clarity&quot;, 4, &quot;grid clarity &quot; .. dreadnought.empath.modules.chair))
 end</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>0</conditonLineDelta>
@@ -1098,6 +1057,8 @@ end</script>
 		dreadnought.action(&quot;planarbond&quot;, 1, &quot;grid planarbond&quot;))
 	dreadnought.heap.insert(dreadnought.actions,
 		dreadnought.action(&quot;covey&quot;, 1, &quot;grid covey&quot;))
+
+	dreadnought.repairShip(dreadnought.actions)
 end</script>
                         <triggerType>0</triggerType>
                         <conditonLineDelta>0</conditonLineDelta>
@@ -1110,7 +1071,7 @@ end</script>
                         <colorTriggerFgColor>#000000</colorTriggerFgColor>
                         <colorTriggerBgColor>#000000</colorTriggerBgColor>
                         <regexCodeList>
-                            <string>^(?:\w+\s?)+ launches into the aetherways\.$</string>
+                            <string>^[\w\'\s]+ launches into the aetherways\.$</string>
                         </regexCodeList>
                         <regexCodePropertyList>
                             <integer>1</integer>
@@ -1136,7 +1097,7 @@ action.postCommand()</script>
                         <colorTriggerFgColor>#000000</colorTriggerFgColor>
                         <colorTriggerBgColor>#000000</colorTriggerBgColor>
                         <regexCodeList>
-                            <string>^You point out to (?:\w+\s?)+ that \w+ has a covey\.$</string>
+                            <string>^You point out to [\w\'\s]+ that she has a covey\.$</string>
                         </regexCodeList>
                         <regexCodePropertyList>
                             <integer>1</integer>
@@ -1162,7 +1123,7 @@ action.postCommand()</script>
                         <colorTriggerFgColor>#000000</colorTriggerFgColor>
                         <colorTriggerBgColor>#000000</colorTriggerBgColor>
                         <regexCodeList>
-                            <string>^You direct (?:\w+\s?)+ to form a deep planar bond with the crew, rooting each of them to the distant aetherwaves\.$</string>
+                            <string>^You direct [\w\'\s]+ to form a deep planar bond with the crew, rooting each of them to the distant aetherwaves\.$</string>
                         </regexCodeList>
                         <regexCodePropertyList>
                             <integer>1</integer>
@@ -1171,7 +1132,8 @@ action.postCommand()</script>
                 </TriggerGroup>
                 <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                     <name>Slivven Check</name>
-                    <script>dreadnought.empath.flags.checkSlivven = true
+                    <script>dreadnought.actions = dreadnought.heap.new()
+dreadnought.empath.flags.checkSlivven = true
 send(&quot;grid modules&quot;, false)</script>
                     <triggerType>0</triggerType>
                     <conditonLineDelta>0</conditonLineDelta>
@@ -1189,6 +1151,36 @@ send(&quot;grid modules&quot;, false)</script>
                     </regexCodeList>
                     <regexCodePropertyList>
                         <integer>1</integer>
+                        <integer>1</integer>
+                    </regexCodePropertyList>
+                </Trigger>
+                <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+                    <name>Prompt</name>
+                    <script>if dreadnought.currentModule == &quot;grid&quot; then
+	local hullStrength = tonumber(matches[2])
+	dreadnought.empath.hull.current = hullStrength
+
+	if hullStrength &gt; dreadnought.empath.hull.max then
+		dreadnought.empath.hull.max = hullStrength
+	elseif hullStrength &lt; dreadnought.empath.hull.max then
+		dreadnought.heap.insert(dreadnought.actions, dreadnought.action(&quot;hull&quot;, 2, &quot;grid repair hull&quot;))
+		dreadnought.repairShip(dreadnought.actions)
+	end
+end</script>
+                    <triggerType>0</triggerType>
+                    <conditonLineDelta>0</conditonLineDelta>
+                    <mStayOpen>0</mStayOpen>
+                    <mCommand></mCommand>
+                    <packageName></packageName>
+                    <mFgColor>#ff0000</mFgColor>
+                    <mBgColor>#ffff00</mBgColor>
+                    <mSoundFile></mSoundFile>
+                    <colorTriggerFgColor>#000000</colorTriggerFgColor>
+                    <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                    <regexCodeList>
+                        <string>^\[(\d+)\-hull, \d+\-power, \w+ damage, \d+\-will \*x?\*\]$</string>
+                    </regexCodeList>
+                    <regexCodePropertyList>
                         <integer>1</integer>
                     </regexCodePropertyList>
                 </Trigger>
@@ -1358,20 +1350,20 @@ dreadnought.fireTurret(dreadnought.actions)</script>
                         <name>Targeting</name>
                         <script>if matches[2] ~= &quot;&quot; then
 	dreadnought.heap.insert(dreadnought.actions,
-		dreadnought.action(&quot;target ship&quot;, 1, &quot;turret target ship &quot; ..matches[3]))
+		dreadnought.action(&quot;target&quot;, 1, &quot;turret target ship &quot; ..matches[3]))
 	dreadnought.heap.insert(dreadnought.actions,
-		dreadnought.action(&quot;fire on ship&quot;, 2, &quot;turret fire&quot;))
+		dreadnought.action(&quot;fire&quot;, 2, &quot;turret fire&quot;))
 else
 	if matches[2] == &quot;karibidean&quot; then
 		dreadnought.heap.insert(dreadnought.actions,
-			dreadnought.action(&quot;target karibidean&quot;, 5, &quot;turret target creature karibidean&quot;))
+			dreadnought.action(&quot;target&quot;, 5, &quot;turret target creature karibidean&quot;))
 		dreadnought.heap.insert(dreadnought.actions,
-			dreadnought.action(&quot;fire on karibidean&quot;, 6, &quot;turret fire&quot;))
+			dreadnought.action(&quot;fire&quot;, 6, &quot;turret fire&quot;))
 	else
 		dreadnought.heap.insert(dreadnought.actions,
-			dreadnought.action(&quot;target creature&quot;, 3, &quot;turret target creature &quot; ..matches[3]))
+			dreadnought.action(&quot;target&quot;, 3, &quot;turret target creature &quot; ..matches[3]))
 		dreadnought.heap.insert(dreadnought.actions,
-			dreadnought.action(&quot;fire on creature&quot;, 4, &quot;turret fire&quot;))
+			dreadnought.action(&quot;fire&quot;, 4, &quot;turret fire&quot;))
 	end
 end</script>
                         <triggerType>0</triggerType>
@@ -1396,7 +1388,7 @@ end</script>
                     <name>Target Acquired</name>
                     <script>local action = dreadnought.heap.head(dreadnought.actions)
 
-if action.name == &quot;target ship&quot; or action.name == &quot;target creature&quot; or action.name == &quot;target karibidean&quot; then
+if action.name == &quot;target&quot; then
 	dreadnought.heap.extract(dreadnought.actions)
 end
 
@@ -1412,7 +1404,7 @@ action.postCommand()</script>
                     <colorTriggerFgColor>#000000</colorTriggerFgColor>
                     <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
-                        <string>^You tune the weapon module to target (?:a|an) (?:\w+\-?\s?)+\.$</string>
+                        <string>^You tune the weapon module to target (?:a|an) [\w\-\s]+\.$</string>
                         <string>No such creature is close enough for a battle turret to get a targeting lock.</string>
                     </regexCodeList>
                     <regexCodePropertyList>
@@ -1557,10 +1549,10 @@ end</script>
                     </regexCodePropertyList>
                 </Trigger>
                 <Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-                    <name>Beast Dies</name>
+                    <name>Target Destroyed</name>
                     <script>local action = dreadnought.heap.head(dreadnought.actions)
 
-if action.name == &quot;fire on ship&quot; or action.name == &quot;fire on creature&quot; or action.name == &quot;fire on karibidean&quot; then
+if action.name == &quot;fire&quot; then
 	dreadnought.heap.extract(dreadnought.actions)	
 end</script>
                     <triggerType>0</triggerType>
@@ -1584,7 +1576,7 @@ end</script>
                     <name>No Target</name>
                     <script>local action = dreadnought.heap.head(dreadnought.actions)
 
-if action.name == &quot;fire on ship&quot; or action.name == &quot;fire on creature&quot; or action.name == &quot;fire on karibidean&quot; then
+if action.name == &quot;target&quot; or action.name == &quot;fire&quot; then
 	dreadnought.heap.extract(dreadnought.actions)	
 end
 
@@ -1601,8 +1593,10 @@ action.postCommand()</script>
                     <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
                         <string>A battle turret is not targeting anything.</string>
+                        <string>No such creature is close enough for a battle turret to get a targeting lock.</string>
                     </regexCodeList>
                     <regexCodePropertyList>
+                        <integer>3</integer>
                         <integer>3</integer>
                     </regexCodePropertyList>
                 </Trigger>
@@ -2125,7 +2119,7 @@ end</script>
                     <integer>1</integer>
                 </regexCodePropertyList>
             </Trigger>
-            <TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+            <TriggerGroup isActive="no" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
                 <name>Gags</name>
                 <script></script>
                 <triggerType>0</triggerType>
@@ -2471,8 +2465,9 @@ end</script>
                 <regex></regex>
                 <Alias isActive="yes" isFolder="no">
                     <name>Grid Modules</name>
-                    <script></script>
-                    <command>grid modules</command>
+                    <script>dreadnought.actions = dreadnought.heap.new()
+send(&quot;grid modules&quot;, false)</script>
+                    <command></command>
                     <packageName></packageName>
                     <regex>^gm$</regex>
                 </Alias>
@@ -2505,6 +2500,7 @@ dreadnought.repairShip(dreadnought.actions)</script>
                 <Alias isActive="yes" isFolder="no">
                     <name>Reset</name>
                     <script>if #matches &gt; 1 then
+	dreadnought.actions = dreadnought.heap.new()
 	local resets = dreadnought.reset.empath()
 
 	dreadnought.aetherbeastsTotal = resets.aetherbeastsTotal
@@ -2548,22 +2544,24 @@ end</script>
                 </Alias>
                 <Alias isActive="yes" isFolder="no">
                     <name>Set Target</name>
-                    <script>if #matches &gt; 2 then
+                    <script>dreadnought.actions = dreadnought.heap.new()
+
+if #matches &gt; 2 then
 	dreadnought.heap.insert(dreadnought.actions,
-		dreadnought.action(&quot;target ship&quot;, 1, &quot;turret target ship &quot; ..matches[2]))
+		dreadnought.action(&quot;target&quot;, 1, &quot;turret target ship &quot; ..matches[2]))
 	dreadnought.heap.insert(dreadnought.actions,
-		dreadnought.action(&quot;fire on ship&quot;, 2, &quot;turret fire&quot;))
+		dreadnought.action(&quot;fire&quot;, 2, &quot;turret fire&quot;))
 else
 	if matches[2] == &quot;karibidean&quot; then
 		dreadnought.heap.insert(dreadnought.actions,
-			dreadnought.action(&quot;target karibidean&quot;, 5, &quot;turret target creature karibidean&quot;))
+			dreadnought.action(&quot;target&quot;, 5, &quot;turret target creature karibidean&quot;))
 		dreadnought.heap.insert(dreadnought.actions,
-			dreadnought.action(&quot;fire on karibidean&quot;, 6, &quot;turret fire&quot;))
+			dreadnought.action(&quot;fire&quot;, 6, &quot;turret fire&quot;))
 	else
 		dreadnought.heap.insert(dreadnought.actions,
-			dreadnought.action(&quot;target creature&quot;, 3, &quot;turret target creature &quot; ..matches[2]))
+			dreadnought.action(&quot;target&quot;, 3, &quot;turret target creature &quot; ..matches[2]))
 		dreadnought.heap.insert(dreadnought.actions,
-			dreadnought.action(&quot;fire on creature&quot;, 4, &quot;turret fire&quot;))
+			dreadnought.action(&quot;fire&quot;, 4, &quot;turret fire&quot;))
 	end
 end
 
@@ -2698,6 +2696,7 @@ end</script>
 end
 
 local exch = function(h, x, y)
+	assert(type(h) == &quot;table&quot;)
 	assert(type(x) == &quot;number&quot;)
 	assert(type(y) == &quot;number&quot;)
 
@@ -2707,28 +2706,25 @@ local exch = function(h, x, y)
 end
 
 local sink = function(h, parentIndex)
-	local N = h.size
-
-	while (parentIndex*2) &lt;= N do
+	while (parentIndex*2) &lt; h.size do
 		local childIndex = parentIndex * 2
 		
-		if childIndex &lt; N and lowerPriority(h.elements[childIndex],
+		if childIndex &lt; h.size and lowerPriority(h.elements[childIndex],
 																									h.elements[childIndex+1]) then
 			childIndex = childIndex + 1
 		end
 
-		if not lowerPriority(h.elements[parentIndex], h.elements[childIndex]) then
-			break
-		else
+		if lowerPriority(h.elements[parentIndex], h.elements[childIndex]) then
 			exch(h, parentIndex, childIndex)
 			parentIndex = childIndex
+		else
+			break
 		end
 	end
 end
 
 local swim = function(h, childIndex)
-	while childIndex &gt; 1 and lowerPriority(h.elements[math.floor(childIndex/2)],
-																										h.elements[childIndex]) do
+	while childIndex &gt; 1 and lowerPriority(h.elements[math.floor(childIndex / 2)], h.elements[childIndex]) do
 		local parentIndex = math.floor(childIndex / 2)
 		exch(h, childIndex, parentIndex)
 		childIndex = parentIndex
@@ -2752,7 +2748,11 @@ dreadnought.heap = {
 
 	extract = function(h)		
 		exch(h, 1, h.size)
-		h.size = h.size - 1
+
+		if h.size &gt; 0 then
+			h.size = h.size - 1
+		end
+
 		local ret = table.remove(h.elements)
 		
 		sink(h, 1)
@@ -2785,20 +2785,26 @@ dreadnought.heap = {
 	local cmd -- The command to execute the given action command
 	if type(command) == &quot;string&quot; then
 		cmd = function()
-			send(command, false)
-			dreadnought.locked = true
+			if dreadnought.balance and not dreadnought.locked then
+				send(command, false)
+				dreadnought.locked = true
+			end
 		end
 	elseif type(command) == &quot;table&quot; then
 		cmd = function()
-			for _,v in ipairs(command) do
-				send(v, false)
+			if dreadnought.balance and not dreadnought.locked then
+				for _,v in ipairs(command) do
+					send(v, false)
+				end
+				dreadnought.locked = true
 			end
-			dreadnought.locked = true
 		end
 	else
 		cmd = function()
-			command()
-			dreadnought.locked = true
+			if dreadnought.balance and not dreadnought.locked then
+				command()
+				dreadnought.locked = true
+			end
 		end
 	end
 
@@ -2809,11 +2815,16 @@ dreadnought.heap = {
 		postCommand = postCommand
 	}
 
-	setmetatable(action, {
+	local mt = {
 		__lt = function(a, b)
-			return a.priority &lt; b.priority
+			return a.priority &gt; b.priority
+		end,
+
+		__le = function(a, b)
+			return a.priority &gt;= b.priority
 		end
-	})
+	}
+	setmetatable(action, mt)
 
 	return action
 end</script>
@@ -2945,6 +2956,11 @@ end</script>
                     <name>Empath</name>
                     <packageName></packageName>
                     <script>dreadnought.empath = dreadnought.empath or {
+	hull = {
+		current = 0,
+		max = 0
+	},
+
 	modules = {
 		chair = &quot;&quot;,
 		grid = &quot;&quot;,
@@ -2960,20 +2976,22 @@ end</script>
 		checkSlivven = false
 	},
 
-	slivvensFound = 0
+	slivvensFound = 0,
+	inspectedModule = &quot;&quot;
 }
 
 function dreadnought.reset.empath()
-	sendGMCP([[Char.Skills.Get {&quot;group&quot;:&quot;aethercraft&quot;}]])
-	send(&quot;\n&quot;)
-	deleteLineP()
-
 	return {
 		aetherbeastsTotal = 0,
 		currentModule = &quot;&quot;,
 		actions = dreadnought.heap.new(),
 
 		empath = {
+			hull = {
+				current = 0,
+				max = 0
+			},
+
 			modules = {
 				chair = &quot;&quot;,
 				grid = &quot;&quot;,
@@ -2983,13 +3001,14 @@ function dreadnought.reset.empath()
 				cube = &quot;&quot;
 			},
 
-			skills = {},
+			skills = dreadnought.empath.skills,
 
 			flags = {
 				checkSlivven = false
 			},
 
-			slivvensFound = 0
+			slivvensFound = 0,
+			inspectedModule = &quot;&quot;
 		}
 	}
 end</script>
@@ -3022,7 +3041,7 @@ function dreadnought.reset.combateer()
 		actions = dreadnought.heap.new(),
 
 		combateer = {
-			skills = {},
+			skills = dreadnought.combateer.skills,
 			flags = {
 				canVortex = false
 			}
@@ -3081,6 +3100,7 @@ end</script>
 	Astralsight = true,
 	Purser = true,
 	Scan = true,
+	FirstMate = true,
 	Resonance = true
 }
 
