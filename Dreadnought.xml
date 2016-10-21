@@ -987,7 +987,7 @@ end</script>
                         <name>Finish</name>
                         <script>local action = dreadnought.heap.head(dreadnought.actions)
 
-if action.name == &quot;emergency clarity&quot; or action == &quot;clarity&quot; then
+if action.name == &quot;emergency clarity&quot; or action.name == &quot;clarity&quot; then
 	dreadnought.heap.extract(dreadnought.actions)
 end
 
